@@ -4,10 +4,11 @@ import com.dfedorino.wm.model.WashingMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 @RestController
 public class WashingMachineController {
@@ -20,7 +21,12 @@ public class WashingMachineController {
     }
 
     @GetMapping("/programs")
-    public ResponseEntity<List<String>> getPrograms() {
+    public ResponseEntity<Set<String>> getPrograms() {
         return ResponseEntity.ok(washingMachine.getPrograms());
+    }
+
+    @GetMapping("/programs/{name}")
+    public ResponseEntity<String> executeProgram(@PathVariable String name) {
+        return ResponseEntity.ok(washingMachine.getProgram(name.toLowerCase(Locale.ROOT)).execute());
     }
 }
