@@ -1,13 +1,23 @@
 package com.dfedorino.wm.model;
 
-public class WashingMachine {
-    private boolean isLocked;
+import org.springframework.stereotype.Component;
 
-    public boolean isLocked() {
-        return isLocked;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class WashingMachine {
+    private List<String> programs;
+
+    public WashingMachine() {
+        programs = new ArrayList<>();
+        programs.add("Delicate");
+        programs.add("Wool");
+        programs.add("Daily 60");
+        programs.add("Quick 15");
     }
 
-    public void setLocked(boolean isLocked) {
-        this.isLocked = isLocked;
+    public List<String> getPrograms() {
+        return programs;
     }
 }
