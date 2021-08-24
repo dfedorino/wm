@@ -20,6 +20,8 @@ public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "name")
+    private String name;
     @Column(name = "volume")
     private int waterVolume;
     @Column(name = "temp")

@@ -20,7 +20,7 @@ class ProgramRepositoryTest {
     @Test
     void testFindAll_whenRequested_thenReturnListOfPrograms() {
         // given
-        Program storedProgram = new Program( null, 100, 60, 2400);
+        Program storedProgram = new Program( null, "daily", 100, 60, 2400);
         testEntityManager.persist(storedProgram);
         testEntityManager.flush();
 
@@ -36,7 +36,7 @@ class ProgramRepositoryTest {
     @Test
     void testFindById_whenExistingIdIsPassed_thenReturnProgram() {
         // given
-        Program storedProgram = new Program( null, 100, 60, 2400);
+        Program storedProgram = new Program( null, "daily", 100, 60, 2400);
         testEntityManager.persist(storedProgram);
         testEntityManager.flush();
 
