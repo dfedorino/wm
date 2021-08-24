@@ -24,7 +24,7 @@ public class Program {
     private String name;
     @Column(name = "volume")
     private int waterVolume;
-    @Column(name = "temp")
+    @Column(name = "temperature")
     private int waterTemperature;
     @Column(name = "washing_time")
     private int washingTime;
