@@ -2,6 +2,7 @@ package com.dfedorino.wm.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -11,6 +12,7 @@ public class WashingMachine {
     private final AtomicBoolean isRunningAProgram = new AtomicBoolean(false);
 
     public Future<String> run(Program program) {
+        Objects.requireNonNull(program);
         isRunningAProgram.set(true);
         int waterVolume = program.getWaterVolume();
         int waterTemperature = program.getWaterTemperature();
