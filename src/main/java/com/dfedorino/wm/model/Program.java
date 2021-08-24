@@ -1,7 +1,11 @@
 package com.dfedorino.wm.model;
 
-import java.util.concurrent.Future;
+import lombok.Value;
 
-public interface Program {
-    String execute();
+@Value
+public class Program {
+    private Long id;
+    private int waterVolume;
+    private int waterTemperature;
+    private int washingTime;
 }

@@ -5,7 +5,9 @@ import com.dfedorino.wm.model.WashingMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class WashingMachineService {
@@ -17,10 +19,13 @@ public class WashingMachineService {
     }
 
     public Set<String> getPrograms() {
-        return washingMachine.getPrograms();
+        Set<String> programs = new HashSet<>();
+        programs.add("Nothing to show yet");
+        return programs;
     }
 
-    public Program getProgram(String name) {
-        return washingMachine.getProgram(name);
+    public String executeProgram(long id) throws ExecutionException, InterruptedException {
+        Program daily = new Program(1L, 100, 60, 2400);
+        return washingMachine.run(daily).get();
     }
 }

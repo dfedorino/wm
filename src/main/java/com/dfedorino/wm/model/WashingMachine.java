@@ -2,53 +2,53 @@ package com.dfedorino.wm.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 public class WashingMachine {
-    private Map<String, Program> programs;
-    private boolean isLocked;
-    private boolean isFilledWithWater;
+    private final AtomicBoolean isRunningAProgram = new AtomicBoolean(false);
 
-    public WashingMachine() {
-        programs = new HashMap<>();
-        programs.put("daily60", new DailyProgram(this));
+    public Future<String> run(Program program) {
+        isRunningAProgram.set(true);
+        int waterVolume = program.getWaterVolume();
+        int waterTemperature = program.getWaterTemperature();
+        int washingTime = program.getWashingTime();
+        String process = lock() +
+                System.lineSeparator() +
+                fill(waterVolume) +
+                System.lineSeparator() +
+                heatWater(waterTemperature) +
+                System.lineSeparator() +
+                wash(washingTime) +
+                System.lineSeparator() +
+                drainWater() +
+                dry() +
+                unlock();
+        isRunningAProgram.set(false);
+        FutureTask<String> futureTask = new FutureTask<>(() -> process);
+        futureTask.run();
+        return futureTask;
     }
 
-    public Program getProgram(String name) {
-        return programs.get(name);
-    }
-
-    public Set<String> getPrograms() {
-        return programs.keySet();
+    private String drainWater() {
+        return "Water is drained";
     }
 
     public String lock() {
-        isLocked = true;
         return "Machine is locked";
     }
 
     public String fill(int waterVolume) {
-        if (isLocked) {
-            isFilledWithWater = true;
-            return "Machine is filled with " + waterVolume + " liters of water";
-        } else {
-            throw new IllegalStateException("Machine is not locked");
-        }
+        return "Machine is filled with " + waterVolume + " liters of water";
     }
 
     public String heatWater(int temperature) {
-        if (isFilledWithWater) {
-            return "Water temperature is " + temperature + " Celsius degrees";
-        } else {
-            throw new IllegalStateException("Machine is not filled with water");
-        }
+        return "Water temperature is " + temperature + " Celsius degrees";
     }
 
     public String wash(long duration) {
-        isFilledWithWater = false;
         return "Machine have been washing the clothes for " + duration + " seconds";
     }
 
@@ -57,7 +57,6 @@ public class WashingMachine {
     }
 
     public String unlock() {
-        isLocked = false;
         return "Machine is unlocked";
     }
 }

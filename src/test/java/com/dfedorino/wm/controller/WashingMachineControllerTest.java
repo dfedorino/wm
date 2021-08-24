@@ -26,6 +26,7 @@ class WashingMachineControllerTest {
     }
 
     @Test
-    void executeProgram() {
+    void executeProgram() throws Exception {
+        mockMvc.perform(get("/programs/daily")).andDo(print());
     }
 }

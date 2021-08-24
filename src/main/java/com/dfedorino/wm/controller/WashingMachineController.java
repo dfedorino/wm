@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class WashingMachineController {
@@ -25,7 +25,7 @@ public class WashingMachineController {
     }
 
     @GetMapping("/programs/{name}")
-    public ResponseEntity<String> executeProgram(@PathVariable String name) {
-        return ResponseEntity.ok(washingMachineService.getProgram(name.toLowerCase(Locale.ROOT)).execute());
+    public ResponseEntity<String> executeProgram(@PathVariable long id) throws ExecutionException, InterruptedException {
+        return ResponseEntity.ok(washingMachineService.executeProgram(id));
     }
 }
