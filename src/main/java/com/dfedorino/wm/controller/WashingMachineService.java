@@ -17,10 +17,6 @@ public class WashingMachineService {
     @Autowired
     private ProgramRepository programRepository;
 
-    public String getGreeting() {
-        return "Washing Machine API";
-    }
-
     public List<ProgramDto> getPrograms() {
         return programRepository.findAll().stream()
                 .map(ProgramDto::new)
