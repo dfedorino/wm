@@ -1,5 +1,6 @@
 package com.dfedorino.wm.controller;
 
+import com.dfedorino.wm.model.ProgramDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +14,13 @@ public class WashingMachineController {
     @Autowired
     private WashingMachineService washingMachineService;
 
-    @GetMapping("/")
+    @GetMapping("/status")
     public ResponseEntity<String> index() {
-        return ResponseEntity.ok(washingMachineService.getGreeting());
+        return ResponseEntity.ok(washingMachineService.getStatus());
     }
 
     @GetMapping("/programs")
-    public ResponseEntity<List<String>> getPrograms() {
+    public ResponseEntity<List<ProgramDto>> getPrograms() {
         return ResponseEntity.ok(washingMachineService.getPrograms());
     }
 

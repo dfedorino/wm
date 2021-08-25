@@ -1,6 +1,7 @@
 package com.dfedorino.wm.controller;
 
 import com.dfedorino.wm.model.Program;
+import com.dfedorino.wm.model.ProgramDto;
 import com.dfedorino.wm.model.ProgramRepository;
 import com.dfedorino.wm.model.WashingMachine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ public class WashingMachineService {
         return "Washing Machine API";
     }
 
-    public List<String> getPrograms() {
+    public List<ProgramDto> getPrograms() {
         return programRepository.findAll().stream()
-                .map(Program::getName)
+                .map(ProgramDto::new)
                 .collect(Collectors.toList());
     }
 

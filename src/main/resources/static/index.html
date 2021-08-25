@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Washing Machine API</title>
+</head>
+<body>
+    <h1>Welcome to Washing Machine API</h1>
+    <button id="statusBtn">Check Status</button>
+    <p id="statusField"></p>
+    <select id = "programSelect">
+        <option> ---Choose program--- </option>
+    </select>
+    <button id="runBtn">Run</button>
+    <script>
+        const statusBtn = document.getElementById('statusBtn');
+        const statusField = document.getElementById('statusField');
+        const programSelect = document.getElementById('programSelect');
+        const runBtn = document.getElementById('runBtn');
+
+        statusBtn.onclick = () => {
+            fetch('http://localhost:8080/status')
+            .then(response => response.text())
+            .then(data => statusField.textContent = data);
+        };
+
+        fetch('http://localhost:8080/programs')
+        .then(response => response.json())
+        .then(data => data.forEach(program => {
+            let option = document.createElement('option');
+            option.value = program.id;
+            option.text = program.name;
+            programSelect.appendChild(option);
+        }));
+
+        runBtn.onclick = () => {
+            let selectedOption = programSelect.options[programSelect.selectedIndex];
+            let id = selectedOption.value;
+            fetch('http://localhost:8080/programs/' + id);
+        }
+    </script>
+</body>
+</html>
