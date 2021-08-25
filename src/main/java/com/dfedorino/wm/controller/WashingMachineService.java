@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class WashingMachineService {
@@ -20,8 +21,10 @@ public class WashingMachineService {
         return "Washing Machine API";
     }
 
-    public List<Program> getPrograms() {
-        return programRepository.findAll();
+    public List<String> getPrograms() {
+        return programRepository.findAll().stream()
+                .map(Program::getName)
+                .collect(Collectors.toList());
     }
 
     public String executeProgram(long id) throws ExecutionException, InterruptedException {

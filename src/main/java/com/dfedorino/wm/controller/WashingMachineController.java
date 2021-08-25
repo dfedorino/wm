@@ -21,7 +21,7 @@ public class WashingMachineController {
     }
 
     @GetMapping("/programs")
-    public ResponseEntity<List<Program>> getPrograms() {
+    public ResponseEntity<List<String>> getPrograms() {
         return ResponseEntity.ok(washingMachineService.getPrograms());
     }
 
