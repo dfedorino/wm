@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +26,12 @@ public class WashingMachineService {
                 .collect(Collectors.toList());
     }
 
-    public String executeProgram(long id) throws ExecutionException, InterruptedException {
+    public String getStatus() {
+        return washingMachine.getStatus();
+    }
+
+    public void executeProgram(long id) {
         Program program = programRepository.findById(id);
-        return washingMachine.run(program).get();
+        washingMachine.run(program);
     }
 }

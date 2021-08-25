@@ -1,64 +1,80 @@
 package com.dfedorino.wm.model;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Log4j2
 @Component
 public class WashingMachine {
     private final AtomicBoolean isRunningAProgram = new AtomicBoolean(false);
+    private Status status = Status.WAITING;
 
-    public Future<String> run(Program program) {
+    public String getStatus() {
+        return status.toString();
+    }
+
+    public void run(Program program) {
         Objects.requireNonNull(program);
-        isRunningAProgram.set(true);
-        int waterVolume = program.getWaterVolume();
-        int waterTemperature = program.getWaterTemperature();
-        int washingTime = program.getWashingTime();
-        String process = lock() +
-                System.lineSeparator() +
-                fill(waterVolume) +
-                System.lineSeparator() +
-                heatWater(waterTemperature) +
-                System.lineSeparator() +
-                wash(washingTime) +
-                System.lineSeparator() +
-                drainWater() +
-                dry() +
+        if (!isRunningAProgram.get()) {
+            Runnable process = () -> {
+                isRunningAProgram.set(true);
+                log.info(Thread.currentThread().getName() + " started the " + program.getName() + " program");
+                status = Status.WASHING;
+                int waterVolume = program.getWaterVolume();
+                int waterTemperature = program.getWaterTemperature();
+                int washingTime = program.getWashingTime();
+                lock();
+                fill(waterVolume);
+                heatWater(waterTemperature);
+                wash(washingTime);
+                drainWater();
+                dry();
                 unlock();
-        isRunningAProgram.set(false);
-        FutureTask<String> futureTask = new FutureTask<>(() -> process);
-        futureTask.run();
-        return futureTask;
+                log.info(Thread.currentThread().getName() + " finished the " + program.getName() + " program");
+                status = Status.WAITING;
+                isRunningAProgram.set(false);
+            };
+            new Thread(process).start();
+        }
     }
 
-    private String drainWater() {
-        return "Water is drained";
+    private void lock() {
+        log.info("Door is locked");
     }
 
-    public String lock() {
-        return "Machine is locked";
+    private void fill(int waterVolume) {
+        log.info("Drum is filled with " + waterVolume + " liters of water");
     }
 
-    public String fill(int waterVolume) {
-        return "Machine is filled with " + waterVolume + " liters of water";
+    private void heatWater(int temperature) {
+        log.info("Water is heated to " + temperature + " degrees Celsius");
     }
 
-    public String heatWater(int temperature) {
-        return "Water temperature is " + temperature + " Celsius degrees";
+    private void wash(long duration) {
+        try {
+            Thread.sleep(5000);
+            log.info("Machine have been washing the clothes for " + duration + " seconds");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public String wash(long duration) {
-        return "Machine have been washing the clothes for " + duration + " seconds";
+    public void drainWater() {
+        log.info("Water is drained");
     }
 
-    public String dry() {
-        return "Machine dried the clothes";
+    private void dry() {
+        log.info("Machine dried the clothes");
     }
 
-    public String unlock() {
-        return "Machine is unlocked";
+    public void unlock() {
+        log.info("Door is unlocked");
+    }
+
+    private enum Status {
+        WAITING, WASHING
     }
 }
