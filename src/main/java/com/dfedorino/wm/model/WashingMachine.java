@@ -1,5 +1,6 @@
 package com.dfedorino.wm.model;
 
+import com.dfedorino.wm.exception.MachineAlreadyRunningException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +39,8 @@ public class WashingMachine {
                 isRunningAProgram.set(false);
             };
             new Thread(process).start();
+        } else {
+            throw new MachineAlreadyRunningException();
         }
     }
 

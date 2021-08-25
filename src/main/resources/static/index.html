@@ -34,7 +34,15 @@
         runBtn.onclick = () => {
             let selectedOption = programSelect.options[programSelect.selectedIndex];
             let id = selectedOption.value;
-            fetch('http://localhost:8080/programs/' + id);
+            fetch('http://localhost:8080/programs/' + id)
+            .then(response => {
+                if (!response.ok) {
+                    statusField.textContent = 'Running another program, please wait';
+                } else {
+                    statusField.textContent = 'Running ' + selectedOption.textContent + ' program';
+                }
+
+            });
         }
     </script>
 </body>
