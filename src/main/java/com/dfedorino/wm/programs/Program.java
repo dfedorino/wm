@@ -14,15 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Entity
 @Table(name = "programs")
 public class Program {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
     private String name;
@@ -32,4 +32,13 @@ public class Program {
     private int waterTemperature;
     @Column(name = "washing_time")
     private int washingTime;
+
+    public Program() {}
+
+    public Program(String name, int waterVolume, int waterTemperature, int washingTime) {
+        this.name = name;
+        this.waterVolume = waterVolume;
+        this.waterTemperature = waterTemperature;
+        this.washingTime = washingTime;
+    }
 }
