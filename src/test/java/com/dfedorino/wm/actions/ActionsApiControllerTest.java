@@ -30,11 +30,7 @@ class ActionsApiControllerTest {
 
     @Test
     void testGetActions_whenClientCanAcceptJson_then200OkAndListOfActions() throws Exception {
-        Action unlock = new Action(1L, "Unlock the machine");
-        Action drain = new Action(2L, "Drain water");
-        Action stop = new Action(3L, "Interrupt current action");
-        Action wash = new Action(4L, "Launch a washing program");
-        List<Action> mockActions = Arrays.asList(unlock, drain, stop, wash);
+        List<Action> mockActions = Arrays.asList(new Action(), new Action());
 
         when(mockService.findAll()).thenReturn(mockActions);
 
