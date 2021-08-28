@@ -1,6 +1,7 @@
 package com.dfedorino.wm.model;
 
 import com.dfedorino.wm.exception.MachineAlreadyRunningException;
+import com.dfedorino.wm.programs.Program;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 

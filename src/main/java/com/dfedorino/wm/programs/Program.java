@@ -1,4 +1,4 @@
-package com.dfedorino.wm.model;
+package com.dfedorino.wm.programs;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
