@@ -2,10 +2,8 @@ package com.dfedorino.wm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("com.dfedorino.wm")
 public class WmApplication {
 
 	public static void main(String[] args) {
