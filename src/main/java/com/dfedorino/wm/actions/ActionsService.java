@@ -5,6 +5,8 @@ import com.dfedorino.wm.programs.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -19,20 +21,20 @@ public class ActionsService {
     }
 
     public ActionResult applyDrain() {
-        ActionResult actionResult = new ActionResult();
-        actionResult.setApplied(washingMachine.drainWater());
-        return actionResult;
+        boolean isApplied = washingMachine.drainWater();
+        Instant timestamp = ZonedDateTime.now().toInstant();
+        return new ActionResult(isApplied, "drain", timestamp);
     }
 
     public ActionResult applyUnlock() {
-        ActionResult actionResult = new ActionResult();
-        actionResult.setApplied(washingMachine.unlock());
-        return actionResult;
+        boolean isApplied = washingMachine.unlock();
+        Instant timestamp = ZonedDateTime.now().toInstant();
+        return new ActionResult(isApplied, "unlock", timestamp);
     }
 
     public ActionResult applyRun(Program program) {
-        ActionResult actionResult = new ActionResult();
-        actionResult.setApplied(washingMachine.run(program));
-        return actionResult;
+        boolean isApplied = washingMachine.run(program);
+        Instant timestamp = ZonedDateTime.now().toInstant();
+        return new ActionResult(isApplied, "run", timestamp);
     }
 }

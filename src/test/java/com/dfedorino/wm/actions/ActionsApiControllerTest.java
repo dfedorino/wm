@@ -10,12 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,8 +59,7 @@ class ActionsApiControllerTest {
 
     @Test
     void testPostDrain_whenMachineIsWaiting_then200OkAndActionResultTrue() throws Exception {
-        ActionResult actionResult = new ActionResult();
-        actionResult.setApplied(true);
+        ActionResult actionResult = new ActionResult(true, "action", ZonedDateTime.now().toInstant());
         when(mockService.applyDrain()).thenReturn(actionResult);
 
         mockMvc.perform(post("/api/actions/drain").accept(MediaType.APPLICATION_JSON))
@@ -71,7 +72,7 @@ class ActionsApiControllerTest {
 
     @Test
     void testPostDrain_whenMachineIsWashing_then409ConflictAndActionResultFalse() throws Exception {
-        ActionResult actionResult = new ActionResult();
+        ActionResult actionResult = new ActionResult(false, "action", ZonedDateTime.now().toInstant());
         when(mockService.applyDrain()).thenReturn(actionResult);
 
         mockMvc.perform(post("/api/actions/drain").accept(MediaType.APPLICATION_JSON))
@@ -84,8 +85,7 @@ class ActionsApiControllerTest {
 
     @Test
     void testPostUnlock_whenMachineIsWaiting_then200OkAndActionResultTrue() throws Exception {
-        ActionResult actionResult = new ActionResult();
-        actionResult.setApplied(true);
+        ActionResult actionResult = new ActionResult(true, "action", ZonedDateTime.now().toInstant());
         when(mockService.applyUnlock()).thenReturn(actionResult);
 
         mockMvc.perform(post("/api/actions/unlock").accept(MediaType.APPLICATION_JSON))
@@ -98,7 +98,7 @@ class ActionsApiControllerTest {
 
     @Test
     void testPostUnlock_whenMachineIsWashing_then409ConflictAndActionResultFalse() throws Exception {
-        ActionResult actionResult = new ActionResult();
+        ActionResult actionResult = new ActionResult(false, "action", ZonedDateTime.now().toInstant());
         when(mockService.applyUnlock()).thenReturn(actionResult);
 
         mockMvc.perform(post("/api/actions/unlock").accept(MediaType.APPLICATION_JSON))
@@ -112,8 +112,7 @@ class ActionsApiControllerTest {
     @Test
     void testPostRun_whenMachineIsWaiting_then200OkAndActionResultTrue() throws Exception {
         Program program = new Program();
-        ActionResult actionResult = new ActionResult();
-        actionResult.setApplied(true);
+        ActionResult actionResult = new ActionResult(true, "action", ZonedDateTime.now().toInstant());
         when(mockService.applyRun(program)).thenReturn(actionResult);
 
         RequestBuilder post = post("/api/actions/run")
@@ -132,7 +131,7 @@ class ActionsApiControllerTest {
     @Test
     void testPostRun_whenMachineIsWashing_then409ConflictAndActionResultFalse() throws Exception {
         Program program = new Program();
-        ActionResult actionResult = new ActionResult();
+        ActionResult actionResult = new ActionResult(false, "action", ZonedDateTime.now().toInstant());
         when(mockService.applyRun(program)).thenReturn(actionResult);
 
         RequestBuilder post = post("/api/actions/run")
