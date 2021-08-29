@@ -1,6 +1,5 @@
 package com.dfedorino.wm.programs;
 
-import com.dfedorino.wm.exception.ProgramNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +37,6 @@ class ProgramsApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(mockProgram)));
-    }
-
-    @Test
-    void testGetProgram_whenNonExistingProgramName_then404NotFound() throws Exception {
-        String nonExistingProgramName = "name";
-        Exception notFound = new ProgramNotFoundException(nonExistingProgramName);
-        when(programsService.findByName(nonExistingProgramName)).thenThrow(notFound);
-
-        mockMvc.perform(get("/api/programs/" + nonExistingProgramName))
-                .andExpect(status().is(404))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test

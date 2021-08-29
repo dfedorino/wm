@@ -21,13 +21,13 @@ public class ActionsService {
     }
 
     public ActionResult applyDrain() {
-        boolean isApplied = washingMachine.drainWater();
+        boolean isApplied = washingMachine.forceDrain();
         Instant timestamp = ZonedDateTime.now().toInstant();
         return new ActionResult(isApplied, "drain", timestamp);
     }
 
     public ActionResult applyUnlock() {
-        boolean isApplied = washingMachine.unlock();
+        boolean isApplied = washingMachine.forceUnlock();
         Instant timestamp = ZonedDateTime.now().toInstant();
         return new ActionResult(isApplied, "unlock", timestamp);
     }

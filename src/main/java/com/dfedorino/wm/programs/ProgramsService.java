@@ -1,6 +1,6 @@
 package com.dfedorino.wm.programs;
 
-import com.dfedorino.wm.exception.ProgramNotFoundException;
+import com.dfedorino.wm.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +12,7 @@ public class ProgramsService {
     private ProgramRepository programRepository;
 
     public Program findByName(String programName) {
-        return programRepository.findByName(programName)
-                .orElseThrow(() -> new ProgramNotFoundException(programName));
+        return programRepository.findByName(programName).orElseThrow(ResourceNotFoundException::new);
     }
 
     public List<Program> findAll() {
