@@ -13,24 +13,25 @@ public class ActionsService {
     private ActionRepository actionRepository;
     @Autowired
     private WashingMachine washingMachine;
-    @Autowired
-    private ActionResult actionResult;
 
     public List<Action> findAll() {
         return actionRepository.findAll();
     }
 
     public ActionResult applyDrain() {
+        ActionResult actionResult = new ActionResult();
         actionResult.setApplied(washingMachine.drainWater());
         return actionResult;
     }
 
     public ActionResult applyUnlock() {
+        ActionResult actionResult = new ActionResult();
         actionResult.setApplied(washingMachine.unlock());
         return actionResult;
     }
 
     public ActionResult applyRun(Program program) {
+        ActionResult actionResult = new ActionResult();
         actionResult.setApplied(washingMachine.run(program));
         return actionResult;
     }

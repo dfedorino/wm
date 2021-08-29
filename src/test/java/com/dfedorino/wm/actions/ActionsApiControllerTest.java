@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -30,21 +28,15 @@ class ActionsApiControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private ActionsService mockService;
-    @MockBean
-    private ActionModelAssembler assemblerMock;
-    private final String localhost = "http://localhost";
-    private final String apiPath = "/api/actions";
+    private final String apiPath = "http://localhost/api/actions";
 
     @Test
     void testGetActions_whenClientCanAcceptJson_then200OkAndListOfActions() throws Exception {
         Action drain = new Action(1L, "drain", "Drain water");
         Action unlock = new Action(2L, "unlock", "Unlock the machine");
         List<Action> mockActions = Arrays.asList(drain, unlock);
-        ActionModelAssembler assembler = new ActionModelAssembler();
-        CollectionModel<EntityModel<Action>> collectionModel = assembler.toCollection(mockActions);
 
         when(mockService.findAll()).thenReturn(mockActions);
-        when(assemblerMock.toCollection(mockActions)).thenReturn(collectionModel);
 
         mockMvc.perform(get("/api/actions").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -73,8 +65,8 @@ class ActionsApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(actionResult)))
-                .andExpect(jsonPath("_links.action.href").value(localhost + apiPath + "/drain"))
-                .andExpect(jsonPath("_links.actions.href").value(localhost + apiPath));
+                .andExpect(jsonPath("_links.self.href").value(apiPath + "/drain"))
+                .andExpect(jsonPath("_links.actions.href").value(apiPath));
     }
 
     @Test
@@ -86,8 +78,8 @@ class ActionsApiControllerTest {
                 .andExpect(status().is(409))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(actionResult)))
-                .andExpect(jsonPath("_links.action.href").value(localhost + apiPath + "/drain"))
-                .andExpect(jsonPath("_links.actions.href").value(localhost + apiPath));
+                .andExpect(jsonPath("_links.self.href").value(apiPath + "/drain"))
+                .andExpect(jsonPath("_links.actions.href").value(apiPath));
     }
 
     @Test
@@ -100,8 +92,8 @@ class ActionsApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(actionResult)))
-                .andExpect(jsonPath("_links.action.href").value(localhost + apiPath + "/unlock"))
-                .andExpect(jsonPath("_links.actions.href").value(localhost + apiPath));
+                .andExpect(jsonPath("_links.self.href").value(apiPath + "/unlock"))
+                .andExpect(jsonPath("_links.actions.href").value(apiPath));
     }
 
     @Test
@@ -113,8 +105,8 @@ class ActionsApiControllerTest {
                 .andExpect(status().is(409))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(actionResult)))
-                .andExpect(jsonPath("_links.action.href").value(localhost + apiPath + "/unlock"))
-                .andExpect(jsonPath("_links.actions.href").value(localhost + apiPath));
+                .andExpect(jsonPath("_links.self.href").value(apiPath + "/unlock"))
+                .andExpect(jsonPath("_links.actions.href").value(apiPath));
     }
 
     @Test
@@ -133,8 +125,8 @@ class ActionsApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(actionResult)))
-                .andExpect(jsonPath("_links.action.href").value(localhost + apiPath + "/run"))
-                .andExpect(jsonPath("_links.actions.href").value(localhost + apiPath));
+                .andExpect(jsonPath("_links.self.href").value(apiPath + "/run"))
+                .andExpect(jsonPath("_links.actions.href").value(apiPath));
     }
 
     @Test
@@ -152,7 +144,7 @@ class ActionsApiControllerTest {
                 .andExpect(status().is(409))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(actionResult)))
-                .andExpect(jsonPath("_links.action.href").value(localhost + apiPath + "/run"))
-                .andExpect(jsonPath("_links.actions.href").value(localhost + apiPath));
+                .andExpect(jsonPath("_links.self.href").value(apiPath + "/run"))
+                .andExpect(jsonPath("_links.actions.href").value(apiPath));
     }
 }
