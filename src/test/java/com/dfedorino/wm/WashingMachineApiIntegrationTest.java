@@ -52,7 +52,7 @@ public class WashingMachineApiIntegrationTest {
     public void testActions_whenPostRunWithProgram_then200Ok() throws Exception {
         Program daily = programService.findByName("daily");
         String programJson = objectMapper.writeValueAsString(daily);
-        mockMvc.perform(post("/api/actions/unlock").content(programJson))
+        mockMvc.perform(post("/api/actions/run").contentType(MediaType.APPLICATION_JSON).content(programJson))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
